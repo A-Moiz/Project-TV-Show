@@ -1,5 +1,12 @@
-#root {
-  color: red;
+:root {
+  --bg: #0b1220;
+  --panel: rgba(255, 255, 255, 0.06);
+  --text: #e8eefc;
+  --muted: rgba(232, 238, 252, 0.72);
+  --border: rgba(255, 255, 255, 0.12);
+  --accent: #7aa7ff;
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  --radius: 18px;
 }
 
 body {
@@ -21,6 +28,30 @@ footer {
   gap: 20px;
   padding: 20px;
   margin-bottom: 100px;
+}
+
+.main-title {
+  text-align: center;
+  font-size: 60px;
+}
+
+.controls {
+  max-width: 800px;
+  margin: 0 auto 60px;
+  text-align: center;
+}
+
+.controls input {
+  width: 80%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+#episodeCount {
+  margin-top: 10px;
+  font-size: 14px;
 }
 
 .episode-card {

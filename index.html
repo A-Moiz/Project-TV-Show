@@ -9,7 +9,24 @@
   </head>
 
   <body>
+    <h1 class="main-title">TV Show Episodes</h1>
     <div id="root"></div>
+
+    <!-- Search + counter -->
+    <div class="controls">
+      <input id="searchInput" type="text" placeholder="Search episodes..." />
+      <p id="episodeCount"></p>
+    </div>
+    
+    <!-- Episode selector -->
+      <select id="episodeSelect">
+        <option value="">Select an episode...</option>
+      </select>
+
+      <button id="showAllBtn">Show All</button>
+
+      <p id="episodeCount"></p>
+    </div>
 
     <!-- Main Container for Episode Views -->
     <div id="main-container" class="main-container"></div>
