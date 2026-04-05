@@ -1,5 +1,5 @@
-// Get all episodes
-const episodes = getAllEpisodes();
+// Array of episodes
+let episodes = [];
 
 // Get episodes count
 const displayEps = document.getElementById("display-info");
@@ -13,6 +13,15 @@ const select = document.getElementById("ep-select");
 // Filters
 searchTerm.addEventListener("keyup", applyFilters);
 select.addEventListener("change", applyFilters);
+
+// Fetch all episodes
+function fetchEpisodes() {
+  return fetch("https://api.tvmaze.com/shows/82/episodes").then(
+    function (data) {
+      return data.json();
+    },
+  );
+}
 
 // Filtering func
 function applyFilters() {
@@ -95,9 +104,22 @@ function populateOptions() {
 
 // Initialize
 function init() {
-  renderEpisodes(episodes);
-  populateOptions();
+  // Initial message
+  displayEps.textContent = "Loading episodes...";
+
+  // Set timeout to render 2s after fetch has completed.
+  setTimeout(function () {
+    fetchEpisodes()
+      .then(function (allEpisodes) {
+        episodes = allEpisodes;
+        renderEpisodes(episodes);
+        populateOptions();
+      })
+      .catch(function (error) {
+        displayEps.textContent = `Error: ${error}. Please try again later.`;
+      });
+  }, 2000);
 }
 
 // Initial render
-window.onload = init();
+window.onload = init;
