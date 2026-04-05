@@ -3,32 +3,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TV Show Project | Abdul Moiz (A-Moiz)</title>
+    <title>Abdul Moiz (A-Moiz)</title>
     <link href="style.css" rel="stylesheet" />
+    <script src="script.js" defer></script>
+    <script src="episodes.js"></script>
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
-    <h1 class="main-title">TV Show Episodes</h1>
-    <div id="root"></div>
+    <h1 class="center">TV Show Episodes</h1>
+    <p class="center" id="display-info"></p>
 
-    <!-- Search + counter -->
-    <div class="controls">
-      <input id="searchInput" type="text" placeholder="Search episodes..." />
-      <p id="episodeCount"></p>
-    </div>
+    <div class="filter-container">
+      <label>
+        <input
+          type="search"
+          id="search"
+          name="search"
+          placeholder="Search episodes..."
+        />
+      </label>
 
-    <!-- Episode selector -->
-      <select id="episodeSelect">
-        <option value="">Show all</option>
+      <select id="ep-select">
+        <option value="all">Show all</option>
       </select>
     </div>
 
-    <!-- Main Container for Episode Views -->
-    <div id="main-container" class="main-container"></div>
+    <div class="ep-container">
+      <template id="ep-card">
+        <section class="ep-section">
+          <h3 class="ep-title">Title</h3>
+          <img class="ep-img" />
+          <p class="ep-summary">Summary</p>
+        </section>
+      </template>
+    </div>
 
-    <!-- Footer Section -->
-    <footer>
+    <footer class="center">
       <p>
         This data has originally come from
         <span
@@ -36,11 +54,5 @@
         >
       </p>
     </footer>
-
-    <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-    <script src="episodes.js"></script>
-
-    <!-- Loads YOUR javascript code -->
-    <script src="script.js" defer></script>
   </body>
 </html>

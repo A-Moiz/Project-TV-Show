@@ -1,105 +1,103 @@
-//You can edit ALL of the code here
-let allEpisodes = [];
+// Get all episodes
+const episodes = getAllEpisodes();
 
-function setup() {
-  allEpisodes = getAllEpisodes();
+// Get episodes count
+const displayEps = document.getElementById("display-info");
 
-  createCard(allEpisodes);
-  makePageForEpisodes(allEpisodes);
-  populateSelector();
+// Get search input
+const searchTerm = document.getElementById("search");
 
-  const searchInput = document.getElementById("searchInput");
-  const select = document.getElementById("episodeSelect");
+// Get select option
+const select = document.getElementById("ep-select");
 
-  // Search filter
-  searchInput.addEventListener("input", () => {
-    const term = searchInput.value.toLowerCase();
+// Filters
+searchTerm.addEventListener("keyup", applyFilters);
+select.addEventListener("change", applyFilters);
 
-    const filtered = allEpisodes.filter((ep) => {
-      return (
-        ep.name.toLowerCase().includes(term) ||
-        (ep.summary || "").toLowerCase().includes(term)
-      );
-    });
+// Filtering func
+function applyFilters() {
+  const query = searchTerm.value.toLowerCase();
+  const selectedID = select.value;
 
-    createCard(filtered);
-    makePageForEpisodes(filtered);
-  });
+  let filtered = episodes;
 
-  // Dropdown filter
-  select.addEventListener("change", () => {
-    const selectedId = select.value;
+  // Filter by search
+  filtered = filtered.filter(
+    (ep) =>
+      ep.name.toLowerCase().includes(query) ||
+      (ep.summary || "").toLowerCase().includes(query),
+  );
 
-    if (!selectedId) {
-      createCard(allEpisodes);
-      makePageForEpisodes(allEpisodes);
-      return;
-    }
-
-    const selectedEpisode = allEpisodes.find((ep) => ep.id == selectedId);
-
-    createCard([selectedEpisode]);
-    makePageForEpisodes([selectedEpisode]);
-  });
-}
-
-function makePageForEpisodes(episodeList) {
-  const rootElem = document.getElementById("root");
-
-  rootElem.textContent = `Displaying ${episodeList.length} / ${allEpisodes.length} episodes`;
-}
-
-function createCard(episodeList) {
-  const mainContainer = document.getElementById("main-container");
-
-  // Clear
-  mainContainer.innerHTML = "";
-
-  for (let i = 0; i < episodeList.length; i++) {
-    const ep = episodeList[i];
-
-    const cardComponent = document.createElement("section");
-
-    const seasonNumString = String(ep.season).padStart(2, "0");
-    const episodeNumString = String(ep.number).padStart(2, "0");
-
-    const title = document.createElement("h3");
-    title.textContent = `${ep.name} - S${seasonNumString}E${episodeNumString}`;
-
-    const image = document.createElement("img");
-    image.src = ep.image?.medium || "";
-    image.alt = ep.name;
-
-    const description = document.createElement("p");
-
-    description.innerHTML = ep.summary || "No summary available";
-
-    cardComponent.classList.add("episode-card");
-
-    cardComponent.appendChild(title);
-    cardComponent.appendChild(image);
-    cardComponent.appendChild(description);
-
-    mainContainer.appendChild(cardComponent);
+  // Filter by dropdown
+  if (selectedID !== "all") {
+    filtered = filtered.filter((ep) => ep.id === Number(selectedID));
   }
+
+  renderEpisodes(filtered);
 }
 
-// Add options
-function populateSelector() {
-  const select = document.getElementById("episodeSelect");
+// Creating each episode card
+function createCard(episode) {
+  const filmCard = document.getElementById("ep-card").content.cloneNode(true);
 
-  allEpisodes.forEach((ep) => {
+  const [seasonNum, episodeNum] = seasonAndEpisodeFormat(
+    String(episode.season),
+    String(episode.number),
+  );
+
+  const title = filmCard.querySelector("h3");
+  const image = filmCard.querySelector("img");
+  const summary = filmCard.querySelector("p");
+
+  title.textContent = `${episode.name} - S${seasonNum}E${episodeNum}`;
+  image.src = episode.image.medium;
+  summary.innerHTML = episode.summary;
+
+  return filmCard;
+}
+
+// Formatting season and episode
+function seasonAndEpisodeFormat(season, episode) {
+  season = season.padStart(2, "0");
+  episode = episode.padStart(2, "0");
+  return [season, episode];
+}
+
+// Rendering episodes
+function renderEpisodes(list) {
+  const container = document.querySelector(".ep-container");
+  const template = document.getElementById("ep-card");
+
+  container.innerHTML = "";
+  container.appendChild(template);
+
+  for (const episode of list) {
+    container.appendChild(createCard(episode));
+  }
+
+  displayEps.textContent = `Displaying ${list.length} / ${episodes.length} episodes`;
+}
+
+// Populate options
+function populateOptions() {
+  episodes.forEach((ep) => {
     const option = document.createElement("option");
-
-    const code = `S${String(ep.season).padStart(2, "0")}E${String(
-      ep.number,
-    ).padStart(2, "0")}`;
-
+    const [seasonNum, episodeNum] = seasonAndEpisodeFormat(
+      String(ep.season),
+      String(ep.number),
+    );
+    const code = `S${seasonNum}E${episodeNum}`;
     option.value = ep.id;
     option.textContent = `${code} - ${ep.name}`;
-
     select.appendChild(option);
   });
 }
 
-window.onload = setup;
+// Initialize
+function init() {
+  renderEpisodes(episodes);
+  populateOptions();
+}
+
+// Initial render
+window.onload = init();
