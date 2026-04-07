@@ -1,38 +1,52 @@
+// URLs
 const EPISODES_URL = "https://api.tvmaze.com/shows/82/episodes";
 const SHOWS_URL = "https://api.tvmaze.com/shows";
+
 // Array of episodes
-let episodes = [];
+let EPISODES = [];
 let SHOWS = [];
 
-// Get episodes count
+// Elements
 const displayEps = document.getElementById("display-info");
-
-// Get search input
 const searchTerm = document.getElementById("search");
-
-// Get select option
 const select = document.getElementById("ep-select");
 const showSelect = document.getElementById("show-select");
+const backToShows = document.querySelector(".back-to-shows");
 
-// Filters
+// Event listeners
 searchTerm.addEventListener("keyup", applyFilters);
 select.addEventListener("change", applyFilters);
 showSelect.addEventListener("change", showChange);
+backToShows.addEventListener("click", showAllShows);
+
+// Go back to all shows by hiding ep view and un-hiding shows view
+function showAllShows() {
+  document.getElementById("ep-view").style.display = "none";
+  document.getElementById("ep-select").style.display = "none";
+  document.querySelector(".back-to-shows").style.display = "none";
+  document.querySelector(".show-container").style.display = "";
+  document.querySelector(".show-select").style.display = "none";
+  searchTerm.value = "";
+  renderShows(SHOWS);
+}
 
 // Fetch all shows
 async function fetchShows() {
-  const response = await fetch("https://api.tvmaze.com/shows");
+  const response = await fetch(SHOWS_URL);
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-  const data = response.json();
-  return data;
+  const data = await response.json();
+
+  return data.sort((a, b) =>
+    a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+  );
 }
 
 // Fetch all episodes
 async function fetchEpisodes() {
-  const response = await fetch("https://api.tvmaze.com/shows/82/episodes");
+  const response = await fetch(EPISODES_URL);
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -43,48 +57,82 @@ async function fetchEpisodes() {
 
 // Filtering func
 function applyFilters() {
-  // Getting values of filters
   const query = searchTerm.value.toLowerCase();
-  const selectedEp = select.value;
+  const showContainer = document.querySelector(".show-container");
 
-  // Creating new array
-  let filteredEps = episodes;
-
-  // Filter by search
-  filteredEps = filteredEps.filter((ep) => {
-    return (
-      ep.name.toLowerCase().includes(query) ||
-      (ep.summary || "").toLowerCase().includes(query)
+  if (showContainer.style.display !== "none") {
+    // Filter Shows
+    const filteredShows = SHOWS.filter(
+      (show) =>
+        show.name.toLowerCase().includes(query) ||
+        show.genres.join(" ").toLowerCase().includes(query) ||
+        show.summary.toLowerCase().includes(query),
     );
-  });
-
-  // Filter by dropdown
-  if (selectedEp !== "all-episodes") {
-    filteredEps = filteredEps.filter((ep) => ep.id === Number(selectedEp));
+    renderShows(filteredShows);
+  } else {
+    // Filter Episodes
+    const selectedEp = select.value;
+    let filteredEps = EPISODES.filter(
+      (ep) =>
+        ep.name.toLowerCase().includes(query) ||
+        (ep.summary || "").toLowerCase().includes(query),
+    );
+    if (selectedEp !== "all-episodes") {
+      filteredEps = filteredEps.filter((ep) => ep.id === Number(selectedEp));
+    }
+    renderEpisodes(filteredEps);
   }
-
-  // Render again
-  renderEpisodes(filteredEps);
 }
 
 // Creating each episode card
-function createCard(episode) {
-  const filmCard = document.getElementById("ep-card").content.cloneNode(true);
+function createEpCard(episode) {
+  const epCard = document.getElementById("ep-card").content.cloneNode(true);
 
   const code = seasonAndEpisodeFormat(
     String(episode.season),
     String(episode.number),
   );
 
-  const title = filmCard.querySelector("h3");
-  const image = filmCard.querySelector("img");
-  const summary = filmCard.querySelector("p");
+  const title = epCard.querySelector("h3");
+  const image = epCard.querySelector("img");
+  const summary = epCard.querySelector("p");
 
   title.textContent = `${episode.name} - ${code}`;
   image.src = episode.image.medium;
-  summary.innerHTML = episode.summary;
+  summary.innerHTML =
+    episode.summary || "No summary available for this episode.";
 
-  return filmCard;
+  return epCard;
+}
+
+// Creating each show card
+function createShowCard(show) {
+  const showCard = document.getElementById("show-card").content.cloneNode(true);
+  const showSection = showCard.querySelector(".show-section");
+
+  const title = showCard.querySelector(".show-title");
+  const image = showCard.querySelector(".show-img");
+  const summary = showCard.querySelector(".show-summary");
+  const genres = showCard.querySelector(".show-genres");
+  const status = showCard.querySelector(".show-status");
+  const rating = showCard.querySelector(".show-rating");
+  const runtime = showCard.querySelector(".show-runtime");
+
+  title.textContent = show.name;
+  image.src = show.image.medium;
+  summary.innerHTML = show.summary;
+
+  genres.textContent = show.genres.join(", ");
+  status.textContent = show.status;
+  rating.textContent = show.rating.average;
+  runtime.textContent = show.runtime;
+
+  showSection.addEventListener("click", () => {
+    showSelect.value = show.id;
+    showChange();
+  });
+
+  return showCard;
 }
 
 // Formatting season and episode
@@ -103,17 +151,32 @@ function renderEpisodes(list) {
   container.appendChild(template);
 
   for (const episode of list) {
-    container.appendChild(createCard(episode));
+    container.appendChild(createEpCard(episode));
   }
 
-  displayEps.textContent = `Displaying ${list.length} / ${episodes.length} episodes`;
+  displayEps.textContent = `Displaying ${list.length} / ${EPISODES.length} episodes`;
+}
+
+// Rendering shows
+function renderShows(list) {
+  const container = document.querySelector(".show-container");
+  const template = document.getElementById("show-card");
+
+  container.innerHTML = "";
+  container.appendChild(template);
+
+  for (const show of list) {
+    container.appendChild(createShowCard(show));
+  }
+
+  displayEps.textContent = `Found ${list.length} / ${SHOWS.length} shows`;
 }
 
 // Populate ep options
 function populateEpOptions() {
   select.innerHTML = `<option value="all-episodes">Show all episodes</option>`;
 
-  episodes.forEach((ep) => {
+  EPISODES.forEach((ep) => {
     const option = document.createElement("option");
     const code = seasonAndEpisodeFormat(String(ep.season), String(ep.number));
     option.value = ep.id;
@@ -135,28 +198,41 @@ function populateShowOptions() {
 
   populateEpOptions();
 }
+
+// Handling show change
 async function showChange() {
   const showId = showSelect.value;
+  const showContainer = document.querySelector(".show-container");
+  const epView = document.getElementById("ep-view");
+
   displayEps.textContent = "Loading episodes...";
+  document.getElementById("ep-select").style.display = "";
 
   try {
-    const response = await fetch(
-      `https://api.tvmaze.com/shows/${showId}/episodes`,
-    );
+    const response = await fetch(`${SHOWS_URL}/${showId}/episodes`);
     const data = await response.json();
 
-    episodes = data;
+    EPISODES = data;
     searchTerm.value = "";
+
+    showContainer.style.display = "none";
+    document.querySelector(".back-to-shows").style.display = "";
+    epView.style.display = "block";
+
     populateEpOptions();
-    renderEpisodes(episodes);
+    renderEpisodes(EPISODES);
   } catch (error) {
-    displayEps.textContent = `Error loading episodes for this show: ${error.message}. Please try again later.`;
+    displayEps.textContent = `Error loading episodes: ${error.message}`;
   }
 }
 
 // Initialize
 async function init() {
   displayEps.textContent = "Loading...";
+  document.getElementById("ep-view").style.display = "none";
+  document.querySelector(".ep-select").style.display = "none";
+  document.querySelector(".back-to-shows").style.display = "none";
+  document.querySelector(".show-select").style.display = "none";
 
   setTimeout(async function () {
     try {
@@ -164,15 +240,12 @@ async function init() {
       SHOWS = allShows;
 
       populateShowOptions();
-
-      if (SHOWS.length > 0) {
-        showSelect.value = SHOWS[0].id;
-        await showChange();
-      }
+      renderShows(SHOWS);
+      displayEps.textContent = `Found ${SHOWS.length} shows`;
     } catch (error) {
-      displayEps.textContent = `Error: ${error.message}. Please try again later.`;
+      displayEps.textContent = `Error: ${error.message}`;
     }
-  }, 2000);
+  }, 1000);
 }
 
 // Initial render

@@ -1,3 +1,4 @@
+/* Entire site */
 body {
   background-color: gray;
   font-family: "Rubik", cursive;
@@ -5,19 +6,18 @@ body {
   font-style: normal;
 }
 
+/* Centering content */
 .center {
   text-align: center;
 }
 
-.filter-container {
-  text-align: center;
-}
-
+/* Episode Card hover */
 .ep-section:hover {
   transform: scale(1.05);
   transition: transform 0.3s ease;
 }
 
+/* Container for all episodes */
 .ep-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -26,6 +26,7 @@ body {
   margin-bottom: 100px;
 }
 
+/* Episode card */
 .ep-section {
   margin: 10px;
   border: solid 1px white;
@@ -34,16 +35,13 @@ body {
   background-color: coral;
 }
 
-.ep-img {
-  border: solid 1px black;
-  border-radius: 10px;
-}
-
+/* Episode card image and p (summary) */
 .ep-section img,
 .ep-section p {
   padding: 10px;
 }
 
+/* Episode card title */
 .ep-title {
   border: solid 1px black;
   border-radius: 10px;
@@ -52,10 +50,55 @@ body {
   background-color: lightblue;
 }
 
+/* Episode card p (summary) */
 .ep-section p {
   text-align: left;
 }
 
+/* Container for all shows */
+.show-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 10px;
+  margin-bottom: 100px;
+}
+
+/* Show content */
+.show-content {
+  padding: 0 20px;
+  color: white;
+}
+
+.show-title {
+  color: white;
+  padding: 0 20px;
+}
+
+/* Show card */
+.show-section {
+  margin: 10px;
+  border: solid 1px white;
+  border-radius: 10px;
+  background-color: rebeccapurple;
+}
+
+/* Show meta info */
+.show-meta {
+  padding: 0 20px;
+  border: solid 1px white;
+  border-radius: 10px;
+  background-color: rgb(64, 0, 64);
+  margin-bottom: 20px;
+}
+
+/* Show card hover */
+.show-section:hover {
+  transform: scale(1.025);
+  cursor: pointer;
+}
+
+/* Footer */
 footer {
   background-color: orange;
   position: fixed;
