@@ -21,6 +21,7 @@ backToShows.addEventListener("click", showAllShows);
 
 // Go back to all shows by hiding ep view and un-hiding shows view
 function showAllShows() {
+  window.scrollTo(0, 0);
   document.getElementById("ep-view").style.display = "none";
   document.getElementById("ep-select").style.display = "none";
   document.querySelector(".back-to-shows").style.display = "none";
@@ -201,6 +202,7 @@ function populateShowOptions() {
 
 // Handling show change
 async function showChange() {
+  window.scrollTo(0, 0);
   const showId = showSelect.value;
   const showContainer = document.querySelector(".show-container");
   const epView = document.getElementById("ep-view");
