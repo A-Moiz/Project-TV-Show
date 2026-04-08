@@ -98,6 +98,51 @@ body {
   cursor: pointer;
 }
 
+/* Search bar */
+#search {
+  padding: 10px;
+  width: 250px;
+  border: solid 1px black;
+  border-radius: 20px;
+}
+
+/* Selects */
+.show-select,
+.ep-select {
+  border: solid 1px black;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+/* Back to shows button */
+.back-to-shows {
+  padding: 10px;
+  border: solid 1px black;
+  border-radius: 20px;
+  background-color: rebeccapurple;
+  color: white;
+  cursor: pointer;
+}
+
+/* Back to shows button hover */
+.back-to-shows:hover {
+  transform: scale(1.03);
+}
+
+/* Search, Selects, Button Background */
+.cta {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  gap: 15px;
+  align-items: center;
+  margin: 20px auto;
+  box-shadow:
+    0 4px 8px 0 rgba(0, 0, 0, 0.5),
+    0 6px 20px 0 rgba(0, 0, 0, 0.5);
+}
+
 /* Footer */
 footer {
   background-color: orange;

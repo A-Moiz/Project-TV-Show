@@ -207,6 +207,7 @@ async function showChange() {
 
   displayEps.textContent = "Loading episodes...";
   document.getElementById("ep-select").style.display = "";
+  document.getElementById("show-select").style.display = "";
 
   try {
     const response = await fetch(`${SHOWS_URL}/${showId}/episodes`);
