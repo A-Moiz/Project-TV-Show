@@ -19,70 +19,71 @@
   <body>
     <h1 class="center">TV Show Episodes</h1>
     <p class="center" id="display-info"></p>
+    <main>
+      <div id="shows-listing"></div>
 
-    <div id="shows-listing"></div>
+      <div class="center">
+        <div class="cta">
+          <label>
+            <input
+              type="search"
+              id="search"
+              name="search"
+              placeholder="Search..."
+            />
+          </label>
 
-    <div class="center">
-      <div class="cta">
-        <label>
-          <input
-            type="search"
-            id="search"
-            name="search"
-            placeholder="Search..."
-          />
-        </label>
+          <select id="show-select" class="show-select"></select>
 
-        <select id="show-select" class="show-select"></select>
+          <select id="ep-select" class="ep-select">
+            <option value="all">Show all</option>
+          </select>
 
-        <select id="ep-select" class="ep-select">
-          <option value="all">Show all</option>
-        </select>
-
-        <button class="back-to-shows">View All Shows</button>
+          <button class="back-to-shows">View All Shows</button>
+        </div>
       </div>
-    </div>
 
-    <div id="ep-view">
-      <div class="ep-container">
-        <template id="ep-card">
-          <section class="ep-section">
-            <h3 class="ep-title"></h3>
-            <img class="ep-img" />
-            <p class="ep-summary"></p>
+      <div id="ep-view">
+        <div class="ep-container">
+          <template id="ep-card">
+            <section class="ep-section">
+              <h2 class="ep-title"></h2>
+              <img class="ep-img" />
+              <p class="ep-summary"></p>
+            </section>
+          </template>
+        </div>
+      </div>
+
+      <div class="show-container">
+        <template id="show-card">
+          <section class="show-section">
+            <a class="show-link">
+              <h2 class="show-title">Title</h2>
+              <div class="show-content">
+                <img class="show-img" />
+                <p class="show-summary">Summary</p>
+                <div class="show-meta">
+                  <p>
+                    <strong>Genres:</strong> <span class="show-genres"></span>
+                  </p>
+                  <p>
+                    <strong>Status:</strong> <span class="show-status"></span>
+                  </p>
+                  <p>
+                    <strong>Rating:</strong> <span class="show-rating"></span>
+                  </p>
+                  <p>
+                    <strong>Runtime:</strong>
+                    <span class="show-runtime"></span> mins
+                  </p>
+                </div>
+              </div>
+            </a>
           </section>
         </template>
       </div>
-    </div>
-
-    <div class="show-container">
-      <template id="show-card">
-        <section class="show-section">
-          <a class="show-link">
-            <h3 class="show-title">Title</h3>
-            <div class="show-content">
-              <img class="show-img" />
-              <p class="show-summary">Summary</p>
-              <div class="show-meta">
-                <p>
-                  <strong>Genres:</strong> <span class="show-genres"></span>
-                </p>
-                <p>
-                  <strong>Status:</strong> <span class="show-status"></span>
-                </p>
-                <p>
-                  <strong>Rating:</strong> <span class="show-rating"></span>
-                </p>
-                <p>
-                  <strong>Runtime:</strong>
-                  <span class="show-runtime"></span> mins
-                </p>
-              </div>
-            </div>
-          </a>
-        </section>
-      </template>
-    </div>
+    </main>
 
     <footer class="center">
       <p>

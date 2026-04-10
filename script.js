@@ -94,12 +94,13 @@ function createEpCard(episode) {
     String(episode.number),
   );
 
-  const title = epCard.querySelector("h3");
+  const title = epCard.querySelector("h2");
   const image = epCard.querySelector("img");
   const summary = epCard.querySelector("p");
 
   title.textContent = `${episode.name} - ${code}`;
-  image.src = episode.image.medium;
+  image.src = episode.image.medium || "./images/no-image.png";
+  image.alt = `${episode.name} (${code})`;
   summary.innerHTML =
     episode.summary || "No summary available for this episode.";
 
@@ -120,7 +121,8 @@ function createShowCard(show) {
   const runtime = showCard.querySelector(".show-runtime");
 
   title.textContent = show.name;
-  image.src = show.image.medium;
+  image.src = show.image.medium || "./images/no-image.png";
+  image.alt = show.name;
   summary.innerHTML = show.summary;
 
   genres.textContent = show.genres.join(", ");
