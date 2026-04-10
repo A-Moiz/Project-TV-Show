@@ -42,7 +42,7 @@ This project was developed as a coursework assignment for **Code Your Future (CY
 ***
 
 ## 👨‍💻 Author
-- **Abdul Moiz** (GitHub: [@A-Moiz](https://github.com))
+- **Abdul Moiz** (GitHub: [@A-Moiz](https://github.com/A-Moiz))
 - **Partner** (GitHub: [@ashaahmed7](https://github.com/ashaahmed7))
 - **Partners repo:** https://github.com/A-Moiz/Project-TV-Show-Partner
 
