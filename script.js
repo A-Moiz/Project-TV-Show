@@ -1,6 +1,9 @@
 // URLs
-const EPISODES_URL = "https://api.tvmaze.com/shows/82/episodes";
-const SHOWS_URL = "https://api.tvmaze.com/shows";
+let EPISODES_URL = "https://api.tvmaze.com/shows/82/episodes";
+let SHOWS_URL = "https://api.tvmaze.com/shows";
+
+// Cache for all episodes
+const EPISODE_CACHE = {};
 
 // Array of episodes
 let EPISODES = [];
@@ -209,26 +212,38 @@ async function showChange() {
   const showContainer = document.querySelector(".show-container");
   const epView = document.getElementById("ep-view");
 
-  displayEps.textContent = "Loading episodes...";
-  document.getElementById("ep-select").style.display = "";
-  document.getElementById("show-select").style.display = "";
+  if (EPISODE_CACHE[showId]) {
+    EPISODES = EPISODE_CACHE[showId];
+    updateUIForEpisodes();
+    return;
+  }
 
+  displayEps.textContent = "Loading episodes...";
   try {
     const response = await fetch(`${SHOWS_URL}/${showId}/episodes`);
     const data = await response.json();
 
+    EPISODE_CACHE[showId] = data;
     EPISODES = data;
-    searchTerm.value = "";
-
-    showContainer.style.display = "none";
-    document.querySelector(".back-to-shows").style.display = "";
-    epView.style.display = "block";
-
-    populateEpOptions();
-    renderEpisodes(EPISODES);
+    updateUI();
   } catch (error) {
-    displayEps.textContent = `Error loading episodes: ${error.message}`;
+    displayEps.textContent = `Error: ${error.message}`;
   }
+}
+
+// Updating UI
+function updateUI() {
+  const showContainer = document.querySelector(".show-container");
+  const epView = document.getElementById("ep-view");
+
+  searchTerm.value = "";
+  showContainer.style.display = "none";
+  document.querySelector(".back-to-shows").style.display = "";
+  epView.style.display = "block";
+  document.getElementById("ep-select").style.display = "";
+
+  populateEpOptions();
+  renderEpisodes(EPISODES);
 }
 
 // Initialize
